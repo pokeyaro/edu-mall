@@ -6,7 +6,7 @@
 
 </script>
 
-<style>
+<style scoped>
 /* 声明全局样式和项目的初始化样式 */
 body,h1,h2,h3,h4,p,table,tr,td,ul,li,a,form,input,select,option,textarea{
   margin:0;
