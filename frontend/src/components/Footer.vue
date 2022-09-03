@@ -23,7 +23,7 @@
         <router-link to="">新手指南</router-link>
       </li>
     </ul>
-    <p>Copyright © education-cloud.com版权所有 | 京ICP备xxxxxxxx号</p>
+    <p>Copyright © education-cloud.com 版权所有 | 京ICP备 xxxxxx 号</p>
   </div>
 </template>
 

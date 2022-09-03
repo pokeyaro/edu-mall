@@ -13,13 +13,13 @@
             <router-link to="">项目课</router-link>
           </li>
           <li>
-            <router-link to="">学位课</router-link>
+            <router-link to="">体系课</router-link>
           </li>
           <li>
             <router-link to="">习题库</router-link>
           </li>
           <li>
-            <router-link to="">路飞学城</router-link>
+            <router-link to="">教育商城</router-link>
           </li>
         </ul>
         <div class="search-warp">
