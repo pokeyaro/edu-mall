@@ -192,6 +192,9 @@ STATICFILES_DIRS = [
 
 # 项目中存储上传文件的根目录[手动创建]，注意，uploads目录需要手动创建否则上传文件时报错
 MEDIA_ROOT = BASE_DIR / 'uploads'
+# import os
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads/')
+# print(MEDIA_ROOT)
 # 访问上传文件的url地址前缀
 MEDIA_URL = '/uploads/'
 

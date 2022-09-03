@@ -20,6 +20,10 @@ from django.views.static import serve                 # 静态文件代理访问
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path(r'uploads/(?P<path>.*)', serve, {'document_root': settings.MEDIA_ROOT}),
+    re_path(r'^uploads/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
     path('home/', include(('apps.home.urls', 'home'), namespace='home')),
 ]
+
+# from django.conf.urls.static import static
+# if settings.DEBUG:
+#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
