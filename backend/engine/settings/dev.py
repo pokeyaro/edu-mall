@@ -9,12 +9,10 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-import sys
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(BASE_DIR / 'apps'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -37,11 +35,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'home',
+    # 第三方组件
+    'rest_framework',                                       # drf框架
+    'corsheaders',                                          # cors跨域子应用
+    # 项目app
+    'apps.home',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',                # cors跨域的中间件
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -50,6 +52,16 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# 最小权限原则
+CORS_ORIGIN_WHITELIST = (
+    'http://www.education-cloud.com:3000',
+)
+CORS_ALLOW_CREDENTIALS = False                              # 不允许ajax跨域请求时携带cookie
+
+# 权限比较大
+# CORS_ALLOW_ALL_ORIGINS = True                             # 适合多终端情况
+
 
 ROOT_URLCONF = 'engine.urls'
 
@@ -76,12 +88,7 @@ WSGI_APPLICATION = 'engine.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
     'default': {
-        # 'ENGINE': 'django.db.backends.mysql',
         'ENGINE': 'dj_db_conn_pool.backends.mysql',
         'NAME': 'edu',
         'PORT': 3306,
@@ -230,5 +237,5 @@ LOGGING = {
 # DRF configuration
 REST_FRAMEWORK = {
     # 自定义异常处理
-    'EXCEPTION_HANDLER': 'engine.utils.exceptions.custom_exception_handler',
+    'EXCEPTION_HANDLER': 'utils.exceptions.custom_exception_handler',
 }

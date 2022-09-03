@@ -1,14 +1,28 @@
-import { defineConfig } from 'vite'
+import {defineConfig} from 'vite'
 import vue from '@vitejs/plugin-vue'
 import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import {ElementPlusResolver} from 'unplugin-vue-components/resolvers'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-    Components({
-      resolvers: [ElementPlusResolver()],
-    }),
-  ]
+    plugins: [
+        vue(),
+        Components({
+            resolvers: [ElementPlusResolver()],
+        }),
+    ],
+    // server: {
+    //     port: '3000',                        // 客户端的运行端口，此处也可以绑定vue运行的端口，当然也可以写在webstorm下
+    //     host: 'www.education-cloud.com',     // 客户端的运行地址，此处也可以绑定vue运行的域名，当然也可以写在webstorm下
+    //     // 跨域代理
+    //     proxy: {
+    //         '/api': {
+    //             // 凡是遇到/api路径的请求，都映射到target属性。/api/header/ ---> http://api.education-cloud.com:8000/header/
+    //             target: 'http://api.education-cloud.com:8000/',
+    //             changeOrigin: true,
+    //             ws: true,                    // 是否支持websocket跨域
+    //             rewrite: path => path.replace(/^\/api/, '')
+    //         }
+    //     }
+    // }
 });
