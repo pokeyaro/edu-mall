@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -166,4 +167,10 @@ LOGGING = {
             'propagate': True,
         },
     }
+}
+
+# DRF configuration
+REST_FRAMEWORK = {
+    # 自定义异常处理
+    'EXCEPTION_HANDLER': 'engine.utils.exceptions.custom_exception_handler',
 }
