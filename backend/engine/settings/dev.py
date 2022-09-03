@@ -74,12 +74,30 @@ WSGI_APPLICATION = 'engine.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
+    'default': {
+        # 'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'dj_db_conn_pool.backends.mysql',
+        'NAME': 'edu',
+        'PORT': 3306,
+        'HOST': '10.0.71.53',
+        'USER': 'edu',
+        'PASSWORD': 'a2CxerxpKuIE9RdCgy5dkIKG',
+        'OPTIONS': {
+            'charset': 'utf8mb4',               # 连接选项配置,mysql8.0以上无需配置
+        },
+        'POOL_OPTIONS': {                       # 连接池的配置信息
+            'POOL_SIZE': 100,                   # 连接池默认创建的链接对象的数量，这里为100
+            'MAX_OVERFLOW': 50,                 # 连接池默认创建的链接对象的最大数量，这里为150
+            'RECYCLE': 24 * 60 * 60,            # 连接可以被重复用多久，超过会重新创建，-1表示永久
+            'TIMEOUT': 30,                      # 池中没有连接最多等待的时间
+        }
+    }
+}
 
 
 # Password validation
