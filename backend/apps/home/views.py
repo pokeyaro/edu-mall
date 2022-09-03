@@ -1,23 +1,20 @@
-from rest_framework import status
-from rest_framework.views import APIView
-from rest_framework.response import Response
+from rest_framework.generics import ListAPIView
 
-from django_redis import get_redis_connection
+from apps.home.models import Nav
+from apps.home.serializers import NavModelSerializer
 
-
-# Call log handler
-import logging
-logger = logging.getLogger("django")
+from utils import constants
 
 
-# Create your views here.
-class HomeAPIView(APIView):
-    def get(self, request):
-        """测试代码，测试完成后可以删除"""
-        # 测试日志功能
-        logger.error("error log")
-        logger.info("info log")
-        redis = get_redis_connection("sms_code")
-        redis.set('test', 'hello world', ex=10)
-        test = redis.get('test')
-        return Response(test, status.HTTP_200_OK)
+class NavHeaderListAPIView(ListAPIView):
+    """顶部导航视图"""
+    queryset = Nav.objects.filter(position=constants.NAV_HEADER_POSITION, is_show=True, is_deleted=False).order_by(
+        "orders", "-id")[:constants.NAV_HEADER_SIZE]
+    serializer_class = NavModelSerializer
+
+
+class NavFooterListAPIView(ListAPIView):
+    """脚部导航视图"""
+    queryset = Nav.objects.filter(position=constants.NAV_FOOTER_POSITION, is_show=True, is_deleted=False).order_by(
+        "orders", "-id")[:constants.NAV_FOOTER_SIZE]
+    serializer_class = NavModelSerializer

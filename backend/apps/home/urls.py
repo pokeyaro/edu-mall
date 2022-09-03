@@ -1,6 +1,9 @@
 from django.urls import path
-from . import views
+
+from apps.home import views
+
 
 urlpatterns = [
-    path('test/', views.HomeAPIView.as_view(), name='test')
+    path("nav/header/", views.NavHeaderListAPIView.as_view(), name='nav_header'),
+    path("nav/footer/", views.NavFooterListAPIView.as_view(), name='nav_footer'),
 ]
