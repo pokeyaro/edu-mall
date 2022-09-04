@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -192,9 +192,6 @@ STATICFILES_DIRS = [
 
 # 项目中存储上传文件的根目录[手动创建]，注意，uploads目录需要手动创建否则上传文件时报错
 MEDIA_ROOT = BASE_DIR / 'uploads'
-# import os
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads/')
-# print(MEDIA_ROOT)
 # 访问上传文件的url地址前缀
 MEDIA_URL = '/uploads/'
 
@@ -234,7 +231,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': BASE_DIR.parent / 'logs/edu-mall.log',
+            'filename': BASE_DIR / 'logs/edu-mall.log',
             'maxBytes': 300 * 1024 * 1024,
             'backupCount': 10,
             'formatter': 'verbose'
