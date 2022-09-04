@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'corsheaders',                                          # cors跨域子应用
     # 项目app
     'apps.home',
+    'apps.users',
 ]
 
 MIDDLEWARE = [
@@ -250,3 +251,8 @@ REST_FRAMEWORK = {
     # 自定义异常处理
     'EXCEPTION_HANDLER': 'utils.exceptions.custom_exception_handler',
 }
+
+# 系统认证相关功能，采用自定义用户模型类
+# 书写格式 '子应用目录名.模型类'
+AUTH_USER_MODEL = 'users.User'
+

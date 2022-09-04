@@ -21,6 +21,7 @@ from django.views.static import serve                 # 静态文件代理访问
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(('apps.home.urls', 'home'), namespace='home')),
+    path('users/', include(('apps.users.urls', 'users'), namespace='users')),
 ]
 
 if settings.DEBUG:
