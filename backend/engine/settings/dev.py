@@ -9,6 +9,9 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+import os
+import time
+import datetime
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -202,45 +205,87 @@ MEDIA_URL = '/uploads/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 # Log configuration
+LOG_PATH = BASE_DIR / 'logs'
 LOGGING = {
     'version': 1,
+    # 禁用后，第三方模块无法捕获自身出现的异常
     'disable_existing_loggers': False,
+    # 日志格式设置，standard或者simple都是自定义的
     'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
-            'style': '{',
+        # 详细格式
+        'standard': {
+            # 格式定义：https://docs.python.org/3/library/logging.html#logrecord-attributes
+            # asctime   发生时间
+            # process   进程ID
+            # thread    线程ID
+            # filename  用户名
+            # lineno    行号
+            # module    模块名
+            # funcName  函数名
+            # levelname 日志等级
+            # message   异常信息
+            'format': '[%(asctime)s] [%(process)d:%(thread)d] [%(filename)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s',
         },
+        # 简单格式
         'simple': {
-            'format': '{levelname} {message}',
-            'style': '{',
+            'format': '%(levelname)s %(message)s'
         },
     },
+    # 过滤器
     'filters': {
         'require_debug_true': {
             '()': 'django.utils.log.RequireDebugTrue',
         },
     },
+    # 日志处理流程
     'handlers': {
+        'default': {
+            'level': 'INFO',              # 设置当前日志处理流程中的日志最低等级
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_PATH, 'all-{}.log'.format(time.strftime('%Y-%m-%d'))),
+            'maxBytes': 1024 * 1024 * 1,  # 文件大小
+            'backupCount': 5,             # 备份数
+            'formatter': 'standard',      # 输出格式
+            'encoding': 'utf-8',          # 默认编码
+        },
+        'error': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_PATH, 'error-{}.log'.format(time.strftime('%Y-%m-%d'))),
+            'maxBytes': 1024 * 1024 * 1,
+            'backupCount': 5,
+            'formatter': 'standard',
+            'encoding': 'utf-8',
+        },
         'console': {
             'level': 'DEBUG',
             'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
-            'formatter': 'simple'
+            'formatter': 'standard',
         },
-        'file': {
+        'info': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': BASE_DIR / 'logs/edu-mall.log',
-            'maxBytes': 300 * 1024 * 1024,
-            'backupCount': 10,
-            'formatter': 'verbose'
-        },
+            'filename': os.path.join(LOG_PATH, 'info-{}.log'.format(time.strftime('%Y-%m-%d'))),
+            'maxBytes': 1024 * 1024 * 1,
+            'backupCount': 5,
+            'formatter': 'standard',
+            'encoding': 'utf-8',
+        }
     },
+    # 日志处理的命名空间
     'loggers': {
+        # 当基于django命名空间写入日志时，调用哪几个日志处理流程
         'django': {
-            'handlers': ['console', 'file'],
+            'handlers': ['default', 'console'],
+            'level': 'INFO',
+            # 是否在django命名空间对应的日志处理流程结束以后，冒泡通知其他的日志功能。True表示允许
+            'propagate': True,
+        },
+        'log': {
+            'handlers': ['error', 'info', 'default', 'console'],
+            'level': 'INFO',
             'propagate': True,
         },
     }
@@ -250,9 +295,22 @@ LOGGING = {
 REST_FRAMEWORK = {
     # 自定义异常处理
     'EXCEPTION_HANDLER': 'utils.exceptions.custom_exception_handler',
+    # 自定义认证
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',  # jwt认证 (优先级最高)
+        'rest_framework.authentication.SessionAuthentication',           # session认证
+        'rest_framework.authentication.BasicAuthentication',
+    ),
 }
+
+# jwt认证相关配置项
+JWT_AUTH = {
+    # 设置jwt的有效期（默认5分钟）
+    # 如果内部站点，例如：运维开发系统，OA，往往配置的access_token有效期基本就是15分钟，30分钟，1~2个小时
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(weeks=1),                 # 一周有效
+}
+
 
 # 系统认证相关功能，采用自定义用户模型类
 # 书写格式 '子应用目录名.模型类'
 AUTH_USER_MODEL = 'users.User'
-
