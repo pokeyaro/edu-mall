@@ -42,9 +42,24 @@ const loginhandler = ()=>{
 
   // 登录请求处理
   user.login().then(response=>{
-    console.log(response.data);
+    // 保存token，并根据用户的选择，是否记住密码
+    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
+    console.log(response.data.token);
+    if(user.remember){ // 判断是否记住登录状态
+      // 记住登录
+      localStorage.token = response.data.token
+    }else{
+      // 不记住登录，关闭浏览器以后就删除状态
+      sessionStorage.token = response.data.token;
+    }
+    // 保存token，并根据用户的选择，是否记住密码
+    // 成功提示
     ElMessage.success("登录成功！");
+    console.log("登录成功！");
+    // 关闭登录弹窗
   }).catch(error=>{
+    console.log(error);
     ElMessage.error("登录失败！");
   })
 }
