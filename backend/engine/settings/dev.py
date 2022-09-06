@@ -316,3 +316,9 @@ JWT_AUTH = {
 # 系统认证相关功能，采用自定义用户模型类
 # 书写格式 '子应用目录名.模型类'
 AUTH_USER_MODEL = 'users.User'
+
+
+# django自定义认证
+# 重写django.conf.global_settings的配置，支持多条件登录认证
+AUTHENTICATION_BACKENDS = ['utils.authenticate.CustomAuthBackend', ]
+
