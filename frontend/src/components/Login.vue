@@ -29,6 +29,7 @@
 <script setup>
 import user from "../api/user";
 import { ElMessage } from 'element-plus'
+const emit = defineEmits(["successhandle",])
 
 // 登录处理
 const loginhandler = ()=>{
@@ -37,7 +38,7 @@ const loginhandler = ()=>{
     // 错误提示
     console.log("错了哦，用户名或密码不能为空！");
     ElMessage.error("错了哦，用户名或密码不能为空！");
-    return ;
+    return false // 在函数/方法中，可以阻止代码继续往下执行
   }
 
   // 登录请求处理
@@ -57,10 +58,16 @@ const loginhandler = ()=>{
     // 成功提示
     ElMessage.success("登录成功！");
     console.log("登录成功！");
-    // 关闭登录弹窗
+    // 关闭登录弹窗，对外发送一个登录成功的信息
+    user.account = ""
+    user.password = ""
+    user.mobile = ""
+    user.code = ""
+    user.remember = false
+    emit("successhandle")
   }).catch(error=>{
     console.log(error);
-    ElMessage.error("登录失败！");
+    ElMessage.error("登录异常！");
   })
 }
 </script>

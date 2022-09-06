@@ -7,7 +7,7 @@
         <p>Talk is cheap. Show me the code.</p>
       </div>
       <div class="login_box">
-        <Login></Login>
+        <Login @successhandle="login_success"></Login>
       </div>
     </div>
   </div>
@@ -15,7 +15,13 @@
 
 <script setup>
 import Login from "../components/Login.vue"
+import router from "../router";
 
+// 用户登录成功以后的处理
+const login_success = ()=>{
+  // 跳转到首页
+  router.push("/");
+}
 </script>
 
 <style scoped>
